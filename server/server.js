@@ -195,6 +195,31 @@ app.post("/login", async (req, res) => {
   }
 });
 
+/* ---------------- SESSION CHECK ---------------- */
+
+app.get("/me", (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.json({ authenticated: false });
+    }
+
+    return res.json({
+      authenticated: true,
+      user: req.session.user
+    });
+  } catch (err) {
+    console.error("ME ERROR:", err);
+    return res.json({ authenticated: false });
+  }
+});
+/* ---------------- LOGOUT ---------------- */
+
+app.post("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.json({ success: true });
+  });
+});
+
 /* ---------------- START ---------------- */
 
 app.listen(PORT, () => {
