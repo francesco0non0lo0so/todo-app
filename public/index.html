@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo Privata - Accesso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+
+  <div class="page-bg" id="authPageBg"></div>
+  <div class="page-overlay"></div>
+  <div class="page-overlay page-overlay-auth"></div>
+
+  <main class="auth-layout">
+    <section class="auth-hero">
+      <div class="hero-badge">ToDo Privata</div>
+
+      <h1 class="hero-title">
+        Organizza tutto in modo
+        <span class="gradient-text">privato, elegante e veloce</span>
+      </h1>
+
+      <p class="hero-text">
+        Accedi al tuo spazio personale oppure crea un nuovo account.
+        Il tuo sfondo, il tuo profilo e le tue task restano salvati nel tuo account.
+      </p>
+
+      <div class="hero-feature-list">
+        <article class="hero-feature-card active">
+          <span class="hero-feature-icon">✨</span>
+          <div>
+            <h2>Interfaccia moderna</h2>
+            <p>Vetro, gradienti morbidi, animazioni fluide e ottima leggibilità.</p>
+          </div>
+        </article>
+
+        <article class="hero-feature-card">
+          <span class="hero-feature-icon">🔐</span>
+          <div>
+            <h2>Accesso personale</h2>
+            <p>Ogni account ha il suo profilo, il suo sfondo e le sue task salvate.</p>
+          </div>
+        </article>
+
+        <article class="hero-feature-card">
+          <span class="hero-feature-icon">📱</span>
+          <div>
+            <h2>Perfetta su mobile</h2>
+            <p>Campi grandi, autocomplete credenziali e layout adattato a ogni dispositivo.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-card auth-card--large">
+        <div class="brand-box">
+          <p class="brand-badge">Il tuo spazio personale</p>
+          <h2 class="auth-panel-title">Benvenuto in ToDo Privata</h2>
+          <p class="brand-subtitle">
+            Accedi o registrati. Al primo accesso vedrai uno sfondo casuale,
+            poi useremo automaticamente quello salvato nel tuo account.
+          </p>
+        </div>
+
+        <div class="auth-tabs">
+          <button id="showLoginBtn" class="tab-btn active" type="button">Accedi</button>
+          <button id="showRegisterBtn" class="tab-btn" type="button">Registrati</button>
+        </div>
+
+        <!-- SEZIONE LOGIN -->
+        <section id="loginSection" class="auth-section active">
+          <form id="loginForm" class="auth-form" novalidate>
+            <div class="field">
+              <label for="loginEmail">Email</label>
+              <input
+                id="loginEmail"
+                name="email"
+                type="email"
+                placeholder="Inserisci la tua email"
+                autocomplete="email username"
+                inputmode="email"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="loginPassword">Password</label>
+
+              <div class="password-field">
+                <input
+                  id="loginPassword"
+                  name="password"
+                  type="password"
+                  placeholder="Inserisci la tua password"
+                  autocomplete="current-password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-target="loginPassword"
+                  data-visible="false"
+                  aria-label="Mostra password"
+                  title="Mostra password"
+                >
+                  <span class="eye-icon eye-open" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                  </span>
+                  <span class="eye-icon eye-closed" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M3 3L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="auth-actions-row">
+              <button class="primary-btn full-width" type="submit">Accedi</button>
+            </div>
+
+            <p id="loginMessage" class="form-message"></p>
+          </form>
+        </section>
+
+        <!-- SEZIONE REGISTRAZIONE -->
+        <section id="registerSection" class="auth-section hidden">
+          <form id="registerForm" class="auth-form" novalidate>
+            <div class="field">
+              <label for="registerName">Nome</label>
+              <input
+                id="registerName"
+                name="name"
+                type="text"
+                placeholder="Come vuoi essere chiamato?"
+                autocomplete="name"
+                maxlength="60"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="registerEmail">Email</label>
+              <input
+                id="registerEmail"
+                name="registerEmail"
+                type="email"
+                placeholder="Inserisci una nuova email"
+                autocomplete="email username"
+                inputmode="email"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="registerPassword">Password</label>
+
+              <div class="password-field">
+                <input
+                  id="registerPassword"
+                  name="registerPassword"
+                  type="password"
+                  placeholder="Crea una password sicura"
+                  autocomplete="new-password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-target="registerPassword"
+                  data-visible="false"
+                  aria-label="Mostra password"
+                  title="Mostra password"
+                >
+                  <span class="eye-icon eye-open" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                  </span>
+                  <span class="eye-icon eye-closed" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M3 3L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="registerConfirmPassword">Conferma password</label>
+
+              <div class="password-field">
+                <input
+                  id="registerConfirmPassword"
+                  name="registerConfirmPassword"
+                  type="password"
+                  placeholder="Ripeti la password"
+                  autocomplete="new-password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-target="registerConfirmPassword"
+                  data-visible="false"
+                  aria-label="Mostra password"
+                  title="Mostra password"
+                >
+                  <span class="eye-icon eye-open" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                      <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.8"/>
+                    </svg>
+                  </span>
+                  <span class="eye-icon eye-closed" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M3 3L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      <path d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-helper">
+              Il nome verrà mostrato nel profilo e in alto a destra nell’app.
+            </div>
+
+            <div class="auth-actions-row">
+              <button class="primary-btn full-width" type="submit">Registrati</button>
+            </div>
+
+            <p id="registerMessage" class="form-message"></p>
+          </form>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

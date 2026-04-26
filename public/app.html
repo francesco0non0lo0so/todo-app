@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ToDo Privata - Le tue task</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="app-page">
+    <div class="page-bg" id="pageBg"></div>
+    <div class="page-overlay"></div>
+    <div class="page-overlay page-overlay-app"></div>
+
+    <main class="app-shell">
+      <section class="app-card">
+        <header class="app-header">
+          <div class="app-header-left">
+            <p class="section-badge">Le tue task</p>
+            <h1>ToDo Privata</h1>
+            <p class="app-subtitle">
+              Organizza, modifica e completa le tue attività ogni giorno.
+            </p>
+          </div>
+
+          <div class="header-actions">
+            <button
+              id="profileMenuBtn"
+              class="profile-chip"
+              type="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span id="profileAvatar" class="profile-avatar">U</span>
+              <span class="profile-chip-text">
+                <span id="userName" class="profile-name">Utente</span>
+                <span id="userEmail" class="profile-email"
+                  >email@esempio.it</span
+                >
+              </span>
+            </button>
+
+            <div id="profileDropdown" class="profile-dropdown hidden">
+              <button
+                id="showTasksPanelBtn"
+                class="dropdown-item"
+                type="button"
+              >
+                Task
+              </button>
+              <button
+                id="showProfilePanelBtn"
+                class="dropdown-item"
+                type="button"
+              >
+                Profilo
+              </button>
+              <button
+                id="showBackgroundPanelBtn"
+                class="dropdown-item"
+                type="button"
+              >
+                Sfondo app
+              </button>
+              <button id="logoutBtn" class="dropdown-item danger" type="button">
+                Esci
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <nav class="app-sections-nav">
+          <button
+            id="navTasksBtn"
+            class="section-switch-btn active"
+            type="button"
+          >
+            Task
+          </button>
+          <button id="navProfileBtn" class="section-switch-btn" type="button">
+            Profilo
+          </button>
+          <button
+            id="navBackgroundBtn"
+            class="section-switch-btn"
+            type="button"
+          >
+            Sfondo
+          </button>
+        </nav>
+
+        <!-- SEZIONE TASK -->
+        <section id="tasksPanel" class="content-panel active">
+          <section class="task-form-card">
+            <div class="form-top-row">
+              <h2 id="formTitle">Nuova task</h2>
+              <button id="cancelEditBtn" class="ghost-btn hidden" type="button">
+                Annulla modifica
+              </button>
+            </div>
+
+            <div class="input-grid">
+              <div class="field field-wide">
+                <label for="taskTitle">Titolo</label>
+                <input
+                  id="taskTitle"
+                  type="text"
+                  placeholder="Cosa devi fare?"
+                  maxlength="120"
+                />
+              </div>
+
+              <div class="field field-wide">
+                <label for="taskDescription">Descrizione</label>
+                <textarea
+                  id="taskDescription"
+                  rows="4"
+                  placeholder="Aggiungi una descrizione opzionale"
+                  maxlength="500"
+                ></textarea>
+              </div>
+
+              <div class="field">
+                <label for="taskTime">Orario</label>
+                <input id="taskTime" type="time" />
+              </div>
+
+              <div class="field">
+                <label for="taskColor">Colore</label>
+                <input id="taskColor" type="color" value="#6ee7ff" />
+              </div>
+
+              <div class="field">
+                <label for="taskType">Tipo</label>
+                <select id="taskType">
+                  <option value="permanente">Permanente</option>
+                  <option value="giornaliero">Giornaliero</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button id="saveTaskBtn" class="primary-btn" type="button">
+                Aggiungi task
+              </button>
+            </div>
+
+            <p id="taskMessage" class="form-message"></p>
+          </section>
+
+          <section class="task-list-section">
+            <div class="task-list-header">
+              <div>
+                <h2>Le tue attività</h2>
+                <p class="task-list-subtitle">
+                  Le task verranno mostrate qui sotto.
+                </p>
+              </div>
+
+              <div class="task-toolbar">
+                <select id="taskSortSelect" class="toolbar-select">
+                  <option value="default">Ordine predefinito</option>
+                  <option value="time">Orario</option>
+                  <option value="title">Titolo</option>
+                  <option value="created">Più recenti</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+              Nessuna task presente. Inizia aggiungendone una.
+            </div>
+
+            <ul id="taskList" class="task-list"></ul>
+          </section>
+        </section>
+
+        <!-- SEZIONE PROFILO -->
+        <section id="profilePanel" class="content-panel hidden">
+          <section class="settings-card">
+            <div class="settings-header">
+              <div>
+                <p class="section-badge">Profilo</p>
+                <h2>Impostazioni profilo</h2>
+                <p class="task-list-subtitle">
+                  Aggiorna nome, email e password del tuo account.
+                </p>
+              </div>
+            </div>
+
+            <div class="settings-grid">
+              <div class="field field-wide">
+                <label for="profileNameInput">Nome</label>
+                <input
+                  id="profileNameInput"
+                  type="text"
+                  maxlength="60"
+                  placeholder="Il tuo nome"
+                />
+              </div>
+
+              <div class="field field-wide">
+                <label for="profileEmailInput">Email</label>
+                <input
+                  id="profileEmailInput"
+                  type="email"
+                  maxlength="120"
+                  placeholder="La tua email"
+                />
+              </div>
+
+              <div class="field field-wide">
+                <label for="currentPasswordInput">Password attuale</label>
+                <div class="password-field">
+                  <input
+                    id="currentPasswordInput"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Inserisci la password attuale"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="currentPasswordInput"
+                    data-visible="false"
+                    aria-label="Mostra password"
+                    title="Mostra password"
+                  >
+                    <span class="eye-icon eye-open" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3.2"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                      </svg>
+                    </span>
+                    <span class="eye-icon eye-closed" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M3 3L21 21"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="newPasswordInput">Nuova password</label>
+                <div class="password-field">
+                  <input
+                    id="newPasswordInput"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Nuova password"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="newPasswordInput"
+                    data-visible="false"
+                    aria-label="Mostra password"
+                    title="Mostra password"
+                  >
+                    <span class="eye-icon eye-open" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3.2"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                      </svg>
+                    </span>
+                    <span class="eye-icon eye-closed" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M3 3L21 21"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="confirmNewPasswordInput"
+                  >Conferma nuova password</label
+                >
+                <div class="password-field">
+                  <input
+                    id="confirmNewPasswordInput"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Conferma nuova password"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    data-target="confirmNewPasswordInput"
+                    data-visible="false"
+                    aria-label="Mostra password"
+                    title="Mostra password"
+                  >
+                    <span class="eye-icon eye-open" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M2 12C4.8 7.6 8 5.5 12 5.5C16 5.5 19.2 7.6 22 12C19.2 16.4 16 18.5 12 18.5C8 18.5 4.8 16.4 2 12Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="3.2"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                      </svg>
+                    </span>
+                    <span class="eye-icon eye-closed" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M3 3L21 21"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M10.6 5.7C11.05 5.57 11.52 5.5 12 5.5C16 5.5 19.2 7.6 22 12C20.94 13.66 19.82 14.95 18.56 15.95"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M6.23 7.25C4.77 8.34 3.47 9.87 2 12C4.8 16.4 8 18.5 12 18.5C13.67 18.5 15.18 18.13 16.56 17.42"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.88 9.88C9.34 10.42 9 11.17 9 12C9 13.66 10.34 15 12 15C12.83 15 13.58 14.66 14.12 14.12"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-actions">
+              <button id="saveProfileBtn" class="primary-btn" type="button">
+                Salva profilo
+              </button>
+            </div>
+
+            <p id="profileMessage" class="form-message"></p>
+          </section>
+        </section>
+
+        <!-- SEZIONE SFONDI -->
+        <section id="backgroundPanel" class="content-panel hidden">
+          <section class="settings-card">
+            <div class="settings-header">
+              <div>
+                <p class="section-badge">Sfondo</p>
+                <h2>Scegli lo sfondo dell’app</h2>
+                <p class="task-list-subtitle">
+                  Lo sfondo si salva automaticamente appena lo selezioni.
+                </p>
+              </div>
+            </div>
+
+            <div id="backgroundGrid" class="background-grid">
+              <!-- CASUALE -->
+              <button class="background-option" type="button" data-bg="random">
+                <span
+                  class="background-thumb"
+                  style="background: linear-gradient(135deg, #6ee7ff, #7c8cff)"
+                ></span>
+                <span class="background-label">Casuale</span>
+              </button>
+
+              <button
+                class="background-option active"
+                type="button"
+                data-bg="background-1.jpg"
+              >
+                <span
+                  class="background-thumb"
+                  style="
+                    background-image: url(&quot;images/background-1.jpg&quot;);
+                  "
+                ></span>
+                <span class="background-label">Sfondo 1</span>
+              </button>
+
+              <button
+                class="background-option"
+                type="button"
+                data-bg="background-2.jpg"
+              >
+                <span
+                  class="background-thumb"
+                  style="
+                    background-image: url(&quot;images/background-2.jpg&quot;);
+                  "
+                ></span>
+                <span class="background-label">Sfondo 2</span>
+              </button>
+
+              <button
+                class="background-option"
+                type="button"
+                data-bg="background-3.jpg"
+              >
+                <span
+                  class="background-thumb"
+                  style="
+                    background-image: url(&quot;images/background-3.jpg&quot;);
+                  "
+                ></span>
+                <span class="background-label">Sfondo 3</span>
+              </button>
+
+              <button
+                class="background-option"
+                type="button"
+                data-bg="background-4.jpg"
+              >
+                <span
+                  class="background-thumb"
+                  style="
+                    background-image: url(&quot;images/background-4.jpg&quot;);
+                  "
+                ></span>
+                <span class="background-label">Sfondo 4</span>
+              </button>
+
+              <button
+                class="background-option"
+                type="button"
+                data-bg="background-5.jpg"
+              >
+                <span
+                  class="background-thumb"
+                  style="
+                    background-image: url(&quot;images/background-5.jpg&quot;);
+                  "
+                ></span>
+                <span class="background-label">Sfondo 5</span>
+              </button>
+            </div>
+
+            <p id="backgroundMessage" class="form-message"></p>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
