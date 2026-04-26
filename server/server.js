@@ -36,11 +36,11 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 app.post("/register", async (req, res) => {
   try {
-    let { nome, email, password } = req.body;
+    let { name, email, password } = req.body;
 
     email = (email || "").toLowerCase().trim();
 
-    if (!nome || nome.length < 2) return res.json({ success: false });
+    if (!name || name.length < 2) return res.json({ success: false });
     if (!email) return res.json({ success: false });
     if (!password || password.length < 8) return res.json({ success: false });
 
@@ -63,7 +63,7 @@ app.post("/register", async (req, res) => {
 
     const { error: insertError } = await supabase.from("users").insert([
       {
-        nome,
+        name,
         email,
         password: hash
       }
@@ -129,7 +129,7 @@ app.get("/me", async (req, res) => {
 
     const { data, error } = await supabase
       .from("users")
-      .select("id,nome,email,background")
+      .select("id,name,email,background")
       .eq("id", req.session.user.id);
 
     if (error || !data || data.length === 0) {
