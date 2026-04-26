@@ -9,6 +9,8 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set("trust proxy", 1);
+
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
   console.error("❌ Mancano SUPABASE_URL o SUPABASE_KEY nelle variabili ambiente.");
   process.exit(1);
