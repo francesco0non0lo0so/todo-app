@@ -309,9 +309,16 @@ app.delete("/tasks/:id", async (req, res) => {
 /* ---------------- BACKGROUND ---------------- */
 
 app.put("/preferences/background", async (req, res) => {
-  if (!req.session.user) return res.status(401).json({ success: false });
+  if (!req.session.user) {
+    return res.status(401).json({ success: false });
+  }
 
-  const { background } = req.body;
+  let { background } = req.body;
+
+  // 👉 se è random, non salvare
+  if (!background || background === "random") {
+    return res.json({ success: true });
+  }
 
   const { error } = await supabase
     .from("users")
@@ -325,7 +332,6 @@ app.put("/preferences/background", async (req, res) => {
 
   res.json({ success: true });
 });
-
 /* ---------------- START ---------------- */
 
 app.listen(PORT, () => {
