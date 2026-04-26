@@ -67,16 +67,24 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  const { data: user } = await supabase
+  const { data, error } = await supabase
     .from("users")
     .select("*")
     .eq("email", email)
     .single();
 
-  if (!user) return res.json({ success: false });
+  if (error || !data) {
+    console.error("LOGIN ERROR:", error);
+    return res.json({ success: false, message: "Credenziali errate" });
+  }
+
+  const user = data;
 
   const ok = await bcrypt.compare(password, user.password);
-  if (!ok) return res.json({ success: false });
+
+  if (!ok) {
+    return res.json({ success: false, message: "Credenziali errate" });
+  }
 
   req.session.user = {
     id: user.id,
