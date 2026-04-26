@@ -197,20 +197,30 @@ app.post("/login", async (req, res) => {
 
 /* ---------------- SESSION CHECK ---------------- */
 
-app.get("/me", (req, res) => {
-  try {
-    if (!req.session.user) {
-      return res.json({ authenticated: false });
-    }
-
-    return res.json({
-      authenticated: true,
-      user: req.session.user
-    });
-  } catch (err) {
-    console.error("ME ERROR:", err);
+app.get("/me", async (req, res) => {
+  if (!req.session.user) {
     return res.json({ authenticated: false });
   }
+
+  const { data: user, error } = await supabase
+    .from("users")
+    .select("id, nome, email, background")
+    .eq("id", req.session.user.id)
+    .maybeSingle();
+
+  if (error || !user) {
+    return res.json({ authenticated: false });
+  }
+
+  res.json({
+    authenticated: true,
+    user: {
+      id: user.id,
+      nome: user.nome,
+      email: user.email,
+      background: user.background
+    }
+  });
 });
 /* ---------------- LOGOUT ---------------- */
 
