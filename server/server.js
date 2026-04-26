@@ -79,7 +79,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirnome, "../public")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 /* ---------------- REGISTER ---------------- */
 
