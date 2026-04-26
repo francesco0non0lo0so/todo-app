@@ -79,7 +79,7 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirnome, "../public")));
 
 /* ---------------- REGISTER ---------------- */
 
@@ -127,7 +127,7 @@ app.post("/register", async (req, res) => {
       .from("users")
       .insert([
         {
-          name: nome,
+          nome: nome,
           email,
           password: hash,
           background: "background-1.jpg"
