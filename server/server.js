@@ -323,16 +323,11 @@ app.put("/preferences/background", async (req, res) => {
     return res.status(401).json({ success: false });
   }
 
-  let { background } = req.body;
-
-  // 👉 se è random, non salvare
-  if (!background || background === "random") {
-    return res.json({ success: true });
-  }
+  const { background } = req.body;
 
   const { error } = await supabase
     .from("users")
-    .update({ background })
+    .update({ background }) // 👉 salva anche "random"
     .eq("id", req.session.user.id);
 
   if (error) {
