@@ -70,9 +70,12 @@ app.post("/register", async (req, res) => {
       .eq("email", email);
 
     if (checkError) {
-      console.error("REGISTER CHECK ERROR:", checkError);
-      return res.json({ success: false, message: "Errore controllo utente." });
-    }
+  console.error("REGISTER CHECK ERROR FULL:", JSON.stringify(checkError, null, 2));
+  return res.json({
+    success: false,
+    message: "Errore controllo utente."
+  });
+}
 
     if (existing && existing.length > 0) {
       return res.json({ success: false, message: "Email già registrata." });
