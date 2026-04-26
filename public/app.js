@@ -153,7 +153,15 @@ async function loginUser(event) {
       body: JSON.stringify({ email, password })
     });
 
-    const data = await response.json();
+    const text = await response.text();
+console.log("RISPOSTA LOGIN:", text);
+
+let data;
+try {
+  data = JSON.parse(text);
+} catch {
+  throw new Error("Risposta non JSON");
+}
 
     if (!response.ok || !data.success) {
       showMessage("loginMessage", data.message || "Email o password non corretti.", "error");

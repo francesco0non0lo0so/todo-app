@@ -152,6 +152,48 @@ app.post("/register", async (req, res) => {
 
   console.log("=== REGISTER END ===");
 });
+/* ---------------- LOGIN ---------------- */
+
+app.post("/login", async (req, res) => {
+  try {
+    console.log("=== LOGIN START ===");
+
+    const email = (req.body.email || "").toLowerCase().trim();
+    const password = req.body.password || "";
+
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .maybeSingle();
+
+    console.log("USER:", user);
+    console.log("ERROR:", error);
+
+    if (error || !user) {
+      return res.json({ success: false, message: "Credenziali errate." });
+    }
+
+    const ok = await bcrypt.compare(password, user.password);
+
+    if (!ok) {
+      return res.json({ success: false, message: "Credenziali errate." });
+    }
+
+    req.session.user = {
+      id: user.id,
+      email: user.email
+    };
+
+    console.log("✅ LOGIN OK");
+
+    return res.json({ success: true });
+
+  } catch (err) {
+    console.error("🔥 LOGIN CRASH:", err);
+    return res.json({ success: false, message: "Errore server." });
+  }
+});
 
 /* ---------------- START ---------------- */
 
