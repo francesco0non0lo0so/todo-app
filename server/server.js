@@ -37,6 +37,8 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.post("/register", async (req, res) => {
   let { nome, email, password } = req.body;
 
+  email = (email || "").toLowerCase().trim();
+
   if (!nome || nome.length < 2) return res.json({ success: false });
   if (!email) return res.json({ success: false });
   if (!password || password.length < 8) return res.json({ success: false });
@@ -65,7 +67,8 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const email = (req.body.email || "").toLowerCase().trim();
+  const password = req.body.password || "";
 
   const { data, error } = await supabase
     .from("users")
