@@ -269,7 +269,6 @@ function bindAppEvents() {
   const navBackgroundBtn = document.getElementById("navBackgroundBtn");
 
   const saveProfileBtn = document.getElementById("saveProfileBtn");
-  const saveBackgroundBtn = document.getElementById("saveBackgroundBtn");
 
   if (saveTaskBtn) saveTaskBtn.addEventListener("click", handleSaveTask);
   if (cancelEditBtn) cancelEditBtn.addEventListener("click", resetTaskForm);
@@ -309,7 +308,6 @@ function bindAppEvents() {
   if (navBackgroundBtn) navBackgroundBtn.addEventListener("click", () => switchAppPanel("background"));
 
   if (saveProfileBtn) saveProfileBtn.addEventListener("click", saveProfileSettings);
-  if (saveBackgroundBtn) saveBackgroundBtn.addEventListener("click", saveBackgroundPreference);
 
   bindBackgroundOptions();
   document.addEventListener("click", handleGlobalClick);
@@ -552,14 +550,12 @@ function bindBackgroundOptions() {
 
       markSelectedBackground(selectedBackground);
 
-      // preview immediata
       if (selectedBackground === "random") {
         applyRandomBackground();
       } else {
         previewBackground(selectedBackground);
       }
 
-      // 🔥 SALVATAGGIO AUTOMATICO
       await saveBackgroundPreference();
     });
   });
@@ -613,7 +609,7 @@ async function saveBackgroundPreference() {
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      showMessage("backgroundMessage", "Errore salvataggio.", "error");
+      showMessage("backgroundMessage", data.message || "Errore salvataggio.", "error");
       return;
     }
 
@@ -820,7 +816,7 @@ function renderTaskItem(task) {
   checkbox.className = "task-checkbox";
   checkbox.checked = Boolean(task.completato);
   checkbox.addEventListener("change", () => {
-    toggleTaskComplete(task.id, checkbox.checked ? 1 : 0);
+    toggleTaskComplete(task.id, checkbox.checked);
   });
 
   const content = document.createElement("div");
@@ -964,6 +960,7 @@ function closeProfileDropdown() {
   dropdown.classList.add("hidden");
   button.setAttribute("aria-expanded", "false");
 }
+
 function markSelectedBackground(bgFile) {
   const options = document.querySelectorAll(".background-option");
 
