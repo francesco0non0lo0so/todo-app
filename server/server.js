@@ -219,6 +219,112 @@ app.post("/logout", (req, res) => {
     res.json({ success: true });
   });
 });
+/* ---------------- TASKS ---------------- */
+
+app.get("/tasks", async (req, res) => {
+  if (!req.session.user) return res.status(401).json([]);
+
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*")
+    .eq("user_id", req.session.user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("TASK LOAD ERROR:", error);
+    return res.json([]);
+  }
+
+  res.json(data || []);
+});
+
+app.post("/tasks", async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false });
+
+  const { titolo, descrizione, orario, colore, tipo } = req.body;
+
+  if (!titolo || titolo.trim().length < 2) {
+    return res.json({ success: false, message: "Titolo non valido." });
+  }
+
+  const { data, error } = await supabase
+    .from("tasks")
+    .insert([
+      {
+        user_id: req.session.user.id,
+        titolo: titolo.trim(),
+        descrizione: descrizione || "",
+        orario: orario || "",
+        colore: colore || "#6ee7ff",
+        tipo: tipo || "permanente"
+      }
+    ])
+    .select()
+    .single();
+
+  if (error) {
+    console.error("TASK INSERT ERROR:", error);
+    return res.json({ success: false, message: "Errore creazione task." });
+  }
+
+  res.json({ success: true, id: data.id });
+});
+
+app.put("/tasks/:id", async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false });
+
+  const { id } = req.params;
+
+  const { error } = await supabase
+    .from("tasks")
+    .update(req.body)
+    .eq("id", id)
+    .eq("user_id", req.session.user.id);
+
+  if (error) {
+    console.error("TASK UPDATE ERROR:", error);
+    return res.json({ success: false });
+  }
+
+  res.json({ success: true });
+});
+
+app.delete("/tasks/:id", async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false });
+
+  const { error } = await supabase
+    .from("tasks")
+    .delete()
+    .eq("id", req.params.id)
+    .eq("user_id", req.session.user.id);
+
+  if (error) {
+    console.error("TASK DELETE ERROR:", error);
+    return res.json({ success: false });
+  }
+
+  res.json({ success: true });
+});
+
+/* ---------------- BACKGROUND ---------------- */
+
+app.put("/preferences/background", async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ success: false });
+
+  const { background } = req.body;
+
+  const { error } = await supabase
+    .from("users")
+    .update({ background })
+    .eq("id", req.session.user.id);
+
+  if (error) {
+    console.error("BACKGROUND ERROR:", error);
+    return res.json({ success: false });
+  }
+
+  res.json({ success: true });
+});
 
 /* ---------------- START ---------------- */
 
