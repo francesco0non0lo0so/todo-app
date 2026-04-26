@@ -337,6 +337,50 @@ app.put("/preferences/background", async (req, res) => {
 
   res.json({ success: true });
 });
+
+/* ---------------- DELETE ACCOUNT ---------------- */
+
+app.delete("/delete-account", async (req, res) => {
+  try {
+    if (!req.session.user) {
+      return res.status(401).json({ success: false });
+    }
+
+    const userId = req.session.user.id;
+
+    // elimina tutte le task dell'utente
+    const { error: tasksError } = await supabase
+      .from("tasks")
+      .delete()
+      .eq("user_id", userId);
+
+    if (tasksError) {
+      console.error("DELETE TASKS ERROR:", tasksError);
+      return res.json({ success: false });
+    }
+
+    // elimina utente
+    const { error: userError } = await supabase
+      .from("users")
+      .delete()
+      .eq("id", userId);
+
+    if (userError) {
+      console.error("DELETE USER ERROR:", userError);
+      return res.json({ success: false });
+    }
+
+    // distrugge sessione
+    req.session.destroy(() => {
+      res.json({ success: true });
+    });
+
+  } catch (err) {
+    console.error("DELETE ACCOUNT CRASH:", err);
+    res.json({ success: false });
+  }
+});
+
 /* ---------------- START ---------------- */
 
 app.listen(PORT, () => {

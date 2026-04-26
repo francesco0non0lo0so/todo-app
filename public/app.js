@@ -243,7 +243,73 @@ async function registerUser(event) {
 /* ---------------- APP PAGE ---------------- */
 
 async function initAppPage() {
-  bindAppEvents();
+  function bindAppEvents() {
+  const saveTaskBtn = document.getElementById("saveTaskBtn");
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const taskSortSelect = document.getElementById("taskSortSelect");
+
+  const profileMenuBtn = document.getElementById("profileMenuBtn");
+  const showTasksPanelBtn = document.getElementById("showTasksPanelBtn");
+  const showProfilePanelBtn = document.getElementById("showProfilePanelBtn");
+  const showBackgroundPanelBtn = document.getElementById("showBackgroundPanelBtn");
+
+  const navTasksBtn = document.getElementById("navTasksBtn");
+  const navProfileBtn = document.getElementById("navProfileBtn");
+  const navBackgroundBtn = document.getElementById("navBackgroundBtn");
+
+  const saveProfileBtn = document.getElementById("saveProfileBtn");
+
+  // 🔥 NUOVO BOTTONE DELETE
+  const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+
+  if (saveTaskBtn) saveTaskBtn.addEventListener("click", handleSaveTask);
+  if (cancelEditBtn) cancelEditBtn.addEventListener("click", resetTaskForm);
+  if (logoutBtn) logoutBtn.addEventListener("click", logoutUser);
+  if (taskSortSelect) taskSortSelect.addEventListener("change", renderSortedTasks);
+
+  if (saveProfileBtn) saveProfileBtn.addEventListener("click", saveProfileSettings);
+
+  // 🔥 CLICK DELETE ACCOUNT
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener("click", deleteAccount);
+  }
+
+  if (profileMenuBtn) {
+    profileMenuBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleProfileDropdown();
+    });
+  }
+
+  if (showTasksPanelBtn) {
+    showTasksPanelBtn.addEventListener("click", () => {
+      closeProfileDropdown();
+      switchAppPanel("tasks");
+    });
+  }
+
+  if (showProfilePanelBtn) {
+    showProfilePanelBtn.addEventListener("click", () => {
+      closeProfileDropdown();
+      switchAppPanel("profile");
+    });
+  }
+
+  if (showBackgroundPanelBtn) {
+    showBackgroundPanelBtn.addEventListener("click", () => {
+      closeProfileDropdown();
+      switchAppPanel("background");
+    });
+  }
+
+  if (navTasksBtn) navTasksBtn.addEventListener("click", () => switchAppPanel("tasks"));
+  if (navProfileBtn) navProfileBtn.addEventListener("click", () => switchAppPanel("profile"));
+  if (navBackgroundBtn) navBackgroundBtn.addEventListener("click", () => switchAppPanel("background"));
+
+  bindBackgroundOptions();
+  document.addEventListener("click", handleGlobalClick);
+}
   initPasswordToggles();
 
   const session = await getCurrentUser();
@@ -998,4 +1064,30 @@ function clearMessage(elementId) {
 
   element.textContent = "";
   element.className = "form-message";
+}
+async function deleteAccount() {
+  const conferma = confirm("Sei sicuro di voler eliminare definitivamente l'account? Questa azione NON si può annullare.");
+
+  if (!conferma) return;
+
+  try {
+    const response = await fetch("/delete-account", {
+      method: "DELETE",
+      credentials: "include"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert("Errore durante l'eliminazione.");
+      return;
+    }
+
+    alert("Account eliminato.");
+
+    window.location.href = "index.html";
+
+  } catch (error) {
+    alert("Errore server.");
+  }
 }
